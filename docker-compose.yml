@@ -1,0 +1,23 @@
+services:
+  pokemon-classifier:
+    build: .
+    image: pokemon-classifier:cuda12.8
+    container_name: pokemon-classifier
+    volumes:
+      - ./workspace:/workspace
+      - uv-cache:/root/.cache/uv
+      - venv-data:/workspace/.venv
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    stdin_open: true
+    tty: true
+    command: bash
+
+volumes:
+  uv-cache:
+  venv-data:

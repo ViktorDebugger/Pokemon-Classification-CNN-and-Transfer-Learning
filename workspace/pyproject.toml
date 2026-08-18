@@ -1,0 +1,23 @@
+[project]
+name = "pokemon-classifier"
+version = "0.1.0"
+description = "CNN and transfer learning classifier for Pokemon species"
+requires-python = ">=3.12"
+dependencies = [
+    "torch",
+    "torchvision",
+    "matplotlib",
+    "pandas",
+    "scikit-learn",
+    "jupyter",
+    "ipykernel",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]

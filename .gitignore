@@ -1,0 +1,13 @@
+# Python / venv
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Trained model checkpoints
+workspace/models/*.pt
+
+# OS
+.DS_Store
