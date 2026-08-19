@@ -48,17 +48,23 @@ Train/validation split — **80/20** (`VAL_RATIO = 0.2`, fixed `SEED = 42`), com
 
 ## Setup and running (Docker + uv)
 
-1. Build and start the container (the first `uv sync` runs automatically on startup, installing `torch`/`torchvision` from the CUDA build plus the rest of the dependencies):
+1. Build and start the container:
    ```
    docker compose up --build -d
    ```
-2. Attach to the container via VS Code:
+2. Install the dependencies inside the container — this step is **required on first run** and is not automatic (`docker-compose.yml` sets `command: bash`, which overrides the Dockerfile's `CMD`):
+   ```
+   docker compose exec pokemon-classifier bash
+   uv sync
+   ```
+   `uv sync` installs `torch`/`torchvision` from the CUDA build plus the rest of the dependencies into `/workspace/.venv`. The shell already starts in `/workspace` (the image's `WORKDIR`). The first sync takes a while — the CUDA wheels are large.
+3. Attach to the container via VS Code:
    - Install the **Dev Containers** extension.
    - `Ctrl+Shift+P` → **"Dev Containers: Attach to Running Container..."** → select `/pokemon-classifier`.
    - In the new window, open the `/workspace` folder.
-3. Open `notebook.ipynb`, select the `/workspace/.venv/bin/python` kernel, and run the cells top to bottom.
+4. Open `notebook.ipynb`, select the `/workspace/.venv/bin/python` kernel, and run the cells top to bottom.
 
-If `pyproject.toml` changed after the container already started, run `uv sync` manually in the container's terminal (`cd /workspace && uv sync`) or restart the container.
+The virtual environment lives in the named volume `venv-data`, not in `./workspace`, so it survives container restarts — `uv sync` only needs to be repeated when `pyproject.toml` changes. To wipe it and start from a clean environment, run `docker compose down -v`.
 
 On first run, the transfer learning cells will automatically download pretrained ResNet18 and MobileNetV2 weights (ImageNet).
 
