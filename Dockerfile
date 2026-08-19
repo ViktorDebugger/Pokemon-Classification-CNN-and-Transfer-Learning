@@ -15,6 +15,4 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 WORKDIR /workspace
 
-EXPOSE 6006
-
 CMD ["bash", "-c", "uv sync && exec bash"]
